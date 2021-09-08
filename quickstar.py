@@ -17,7 +17,7 @@ page_token = None
 
 
 while True:
-    response = service.files().list(q = " name contains 'tar.gz' and modifiedTime < '2020-11-20T12:00:00-08:00' " ,
+    response = service.files().list(q = " name contains 'tar.gz' and modifiedTime < '2021-08-06T12:00:00-08:00' and modifiedTime > '2021-07-10T12:00:00-08:00'" ,
                                           spaces='drive',
                                           fields='nextPageToken, files(id, name)',
                                           pageToken=page_token).execute()
@@ -25,10 +25,9 @@ while True:
     for file in response.get('files', []):
         lista.append(file.get('id'))
         print(file.get('name'), file.get('id'))
-        
-    for rec in lista:
-        service.files().delete(fileId=rec).execute()
+        service.files().delete(fileId=file.get('id')).execute()
         print('Correctamente eliminado')
+        
 
     page_token = response.get('nextPageToken', None)
     if page_token is None:
@@ -36,11 +35,3 @@ while True:
     
 
 
-
- #service.trash() 
-    #service.delete()
-#    print(f'Fecha de eliminacion: {fecha}')
-
-#"name contains 'zaphir_ee'
-#name contains 'zaphir_' and name contains 'ee'
-#and mimeType = 'application/x-tar'
